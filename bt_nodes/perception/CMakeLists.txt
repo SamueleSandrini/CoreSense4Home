@@ -23,6 +23,8 @@ find_package(OpenCV REQUIRED)
 find_package(perception_system_interfaces REQUIRED)
 find_package(sensor_msgs REQUIRED)
 find_package(std_srvs REQUIRED)
+find_package(state_observers REQUIRED)
+
 # find_package(backward_ros REQUIRED)
 
 
@@ -47,10 +49,12 @@ set(dependencies
   perception_system_interfaces
   sensor_msgs
   std_srvs
+  state_observers
   # backward_ros
 )
 
-include_directories(include)
+include_directories(include
+  ${state_observers_INCLUDE_DIRS}) #TODO(@samu): remove this line
 
 add_library(extract_object_from_scene_bt_node SHARED src/perception/ExtractObjectsFromScene.cpp)
 list(APPEND plugin_libs extract_object_from_scene_bt_node)
@@ -72,6 +76,9 @@ list(APPEND plugin_libs is_moving_bt_node)
 
 add_library(filter_entity_bt_node SHARED src/perception/filter_entity.cpp)
 list(APPEND plugin_libs filter_entity_bt_node)
+
+add_library(filter_entity_kf_bt_node SHARED src/perception/filter_entity_kf.cpp)
+list(APPEND plugin_libs filter_entity_kf_bt_node)
 
 add_library(is_pointing_bt_node SHARED src/perception/is_pointing.cpp)
 list(APPEND plugin_libs is_pointing_bt_node)
